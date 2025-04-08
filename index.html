@@ -24,27 +24,27 @@
     <h2>Image Processing Results</h2>
     <pre id="processing-results" style="color: white; font-family: monospace;"></pre>
   </div>
-  <script>
-    // Function to run the Python script and display results
-    async function runPythonScript() {
-      try {
-        // This would typically be handled by a backend server
-        // For demonstration, we'll simulate the output
-        const results = `
-Original: PSNR = 100.00, SSIM = 1.0000
-Histogram Equalization: PSNR = 15.23, SSIM = 0.4567
-Adaptive Equalization: PSNR = 18.45, SSIM = 0.5678
-Unsharp Masking: PSNR = 20.12, SSIM = 0.6789
-        `;
-        document.getElementById('processing-results').textContent = results;
-      } catch (error) {
-        console.error('Error:', error);
-        document.getElementById('processing-results').textContent = 'Error processing image';
-      }
+<script>
+  async function runPythonScript() {
+    const url = "https://mars.nasa.gov/mer/gallery/press/opportunity/20040129a/PIA05003_br.jpg"; // example
+
+    const response = await fetch('http://localhost:5000/process', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ url: url })
+    });
+
+    const results = await response.json();
+
+    let display = '';
+    for (const [method, metrics] of Object.entries(results)) {
+      display += `${method}: PSNR = ${metrics.PSNR.toFixed(2)}, SSIM = ${metrics.SSIM.toFixed(4)}\n`;
     }
 
-    // Run the script when the page loads
-    window.addEventListener('load', runPythonScript);
-  </script>
+    document.getElementById('processing-results').textContent = display;
+  }
+
+  window.addEventListener('load', runPythonScript);
+</script>
 </body>
 </html>
