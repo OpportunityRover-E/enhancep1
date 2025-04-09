@@ -22,28 +22,10 @@
     <h2>Image Processing</h2>
     <pre id="processing-results" style="color: white; font-family: monospace;"></pre>
   </div>
-<script>
-  async function runPythonScript() {
-    const url = "https://mars.nasa.gov/mer/gallery/press/opportunity/20040129a/PIA05003_br.jpg"; // example
-
-    const response = await fetch('http://localhost:5000/process', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ url: url })
-    });
-
-    const results = await response.json();
-
-    let display = '';
-    for (const [method, metrics] of Object.entries(results)) {
-      display += `${method}: PSNR = ${metrics.PSNR.toFixed(2)}, SSIM = ${metrics.SSIM.toFixed(4)}\n`;
-    }
-
-    document.getElementById('processing-results').textContent = display;
-  }
-
-  window.addEventListener('load', runPythonScript);
-</script>
+<title>Run my Python files</title>
+<?PHP
+echo shell_exec("python test.py 'parameter1'");
+?>
 </body>
 </html>
 
